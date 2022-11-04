@@ -1,13 +1,10 @@
 import React from 'react';
 
-export type ReactAdapterConsumerProps<P = {}> = Partial<P> & {
+export type ReactAdapterConsumerProps<P = {}> = P & {
   fallback: React.SuspenseProps['fallback'];
   // the Adapter will be the same as the exported from ReactAdapterProvider
   importer: () => Promise<{
-    default:
-      | React.ComponentType<P>
-      | React.ExoticComponent<P>
-      | React.FunctionComponent<P>;
+    default: React.ComponentType<P>;
   }>;
 };
 
@@ -17,7 +14,7 @@ class ReactAdapterConsumer<P = {}> extends React.Component<
   ReactAdapterConsumerProps<P>,
   ReactAdapterConsumerState
 > {
-  private RemoteComponent: React.ComponentType<P> | React.ExoticComponent<P>;
+  private RemoteComponent: React.LazyExoticComponent<React.ComponentType<P>>;
 
   constructor(props: ReactAdapterConsumerProps<P>) {
     super(props);
@@ -25,9 +22,10 @@ class ReactAdapterConsumer<P = {}> extends React.Component<
   }
 
   render() {
+    const { fallback, importer: _, ...rest } = this.props;
     return (
-      <React.Suspense fallback={this.props.fallback}>
-        <this.RemoteComponent {...(this.props as React.PropsWithChildren<P>)} />
+      <React.Suspense fallback={fallback}>
+        <this.RemoteComponent {...(rest as any)} />
       </React.Suspense>
     );
   }
