@@ -2,7 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 export type ReactAdaperProviderProps<P = {}> = P & {
-  component: React.FunctionComponent<P> | React.ComponentClass<P> | keyof React.ReactHTML | string;
+  component:
+    | React.FunctionComponent<P>
+    | React.ComponentClass<P>
+    | keyof React.ReactHTML
+    | string;
   children?: React.ReactNode;
 };
 
@@ -10,7 +14,7 @@ export interface ReactAdaperProviderState {
   Component: React.ReactNode;
 }
 
-class ReactAdaperProvider<P = {}> extends React.Component<
+export class ReactAdaperProvider<P = {}> extends React.Component<
   ReactAdaperProviderProps<P>,
   ReactAdaperProviderState
 > {
@@ -25,7 +29,10 @@ class ReactAdaperProvider<P = {}> extends React.Component<
     (async () => {
       const { component, children, ...rest } = this.props;
       const renderMethod = hydrate ? ReactDOM.hydrate : ReactDOM.render;
-      renderMethod(React.createElement(component as string, rest, children), this.refHold);
+      renderMethod(
+        React.createElement(component as string, rest, children),
+        this.refHold
+      );
     })();
   };
 

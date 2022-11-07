@@ -10,7 +10,7 @@ export type ReactAdapterConsumerProps<P = {}> = P & {
 
 export interface ReactAdapterConsumerState {}
 
-class ReactAdapterConsumer<P = {}> extends React.Component<
+export class ReactAdapterConsumer<P = {}> extends React.Component<
   ReactAdapterConsumerProps<P>,
   ReactAdapterConsumerState
 > {
